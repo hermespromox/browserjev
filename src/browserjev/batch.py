@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from typing import Any
 
 from .models import ClassificationResult, CrawlConfig, Question
@@ -11,7 +11,7 @@ async def classify_many(
     agent: Any,
     domains: Iterable[str],
     *,
-    questions: dict[str, Question],
+    questions: Mapping[str, Question],
     concurrency: int = 20,
     config: CrawlConfig | None = None,
 ) -> list[ClassificationResult]:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from typing import Any
 
 import httpx
@@ -33,9 +34,7 @@ class JevDecisionProvider:
     @staticmethod
     def _state(pages: list[PageSnapshot], *, goal: str | None = None) -> dict[str, Any]:
         state: dict[str, Any] = {
-            "pages": [
-                {"url": page.url, "title": page.title, "text": page.text} for page in pages
-            ]
+            "pages": [{"url": page.url, "title": page.title, "text": page.text} for page in pages]
         }
         if goal:
             state["goal"] = goal
@@ -95,7 +94,7 @@ class JevDecisionProvider:
         self,
         *,
         pages: list[PageSnapshot],
-        questions: dict[str, Question],
+        questions: Mapping[str, Question],
     ) -> tuple[dict[str, Any], dict[str, int]]:
         data = await self._evaluate(
             state=self._state(pages),
