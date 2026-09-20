@@ -1,4 +1,5 @@
 from .agent import BrowserJev
+from .batch import classify_many
 from .models import (
     ChoiceQuestion,
     CrawlConfig,
@@ -13,5 +14,6 @@ __all__ = [
     "CrawlConfig",
     "NoulQuestion",
     "ScoreQuestion",
+    "classify_many",
     "question_from_dict",
 ]

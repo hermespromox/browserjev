@@ -44,6 +44,31 @@ uv run browserjev example.com --questions examples/questions.json
 
 The crawler first tries HTTPX + selectolax. It escalates to the configured Lightpanda CDP endpoint only when the static response looks like a JavaScript shell.
 
+Start Lightpanda separately:
+
+```bash
+lightpanda serve --host 127.0.0.1 --port 9222 --cdp-max-connections 100 \
+  --block-private-networks
+```
+
+For many domains, use the bounded-concurrency helper rather than spawning unbounded tasks:
+
+```python
+from browserjev import BrowserJev, NoulQuestion, classify_many
+
+agent = BrowserJev.default()
+results = await classify_many(
+    agent,
+    ["example.com", "example.org"],
+    questions={
+        "has_pricing": NoulQuestion(
+            instructions="Does the site publish specific prices?"
+        )
+    },
+    concurrency=40,
+)
+```
+
 ## Python API
 
 ```python
