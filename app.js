@@ -298,15 +298,13 @@
       const card = el("article", "answer-card");
       card.append(el("p", "answer-number", key.replace("question_", "Q")));
       card.append(el("p", "answer-question", questions[index]?.instructions || `Question ${index + 1}`));
-      card.append(el("p", "answer-value", displayValue(answer.value)));
+      const answerValue =
+        answer.type === "noul" ? percent(answer.value) || displayValue(answer.value) : displayValue(answer.value);
+      card.append(el("p", "answer-value", answerValue));
       const confidence = percent(answer.confidence);
-      card.append(
-        el(
-          "p",
-          "answer-meta",
-          confidence ? `${answer.type} · confiance ${confidence}` : answer.type,
-        ),
-      );
+      if (confidence) {
+        card.append(el("p", "answer-meta", `Confiance ${confidence}`));
+      }
 
       if (answer.probabilities && typeof answer.probabilities === "object") {
         const probabilityList = el("div", "probabilities");
