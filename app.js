@@ -272,6 +272,18 @@
     return String(value);
   }
 
+  function apiErrorMessage(response, data) {
+    const error = data?.error;
+    if (typeof error === "string" && error.trim()) return error;
+    if (error && typeof error.message === "string" && error.message !== "Forbidden") {
+      return error.message;
+    }
+    if (response.status === 403 || response.status === 429) {
+      return "Trop d’analyses ont été lancées. Réessayez dans quelques minutes.";
+    }
+    return "Le service n’a pas pu terminer l’analyse.";
+  }
+
   function percent(value) {
     if (typeof value !== "number" || !Number.isFinite(value)) return null;
     const normalized = value <= 1 ? value * 100 : value;
@@ -391,7 +403,7 @@
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(data.error || "Le service n’a pas pu terminer l’analyse.");
+        throw new Error(apiErrorMessage(response, data));
       }
       renderResults(data);
     } catch (error) {
