@@ -174,7 +174,7 @@
     const typeSelect = document.createElement("select");
     typeSelect.id = `q-${question.id}-type`;
     [
-      ["noul", "Oui / Non (Noul)"],
+      ["noul", "Oui / Non"],
       ["choice", "Choix unique"],
       ["score", "Score"],
     ].forEach(([value, label]) => {
