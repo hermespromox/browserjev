@@ -1,0 +1,4 @@
+httpx>=0.27,<1
+selectolax>=0.3.21,<1
+pydantic>=2.7,<3
+websockets>=12,<16

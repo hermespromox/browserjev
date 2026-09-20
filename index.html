@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Analysez un site avec des questions structurées Noul, Choix et Score grâce à BrowserJev."
+    />
+    <meta name="theme-color" content="#161616" />
+    <title>BrowserJev — Analyse structurée de sites web</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="brand" href="/" aria-label="BrowserJev, accueil">
+        <span class="brand-mark" aria-hidden="true">BJ</span>
+        <span>BrowserJev</span>
+      </a>
+      <span class="masthead-label">Classificateur web</span>
+      <a
+        class="github-link"
+        href="https://github.com/hermespromox/browserjev"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Décisions structurées · Preuves vérifiables</p>
+          <h1 id="page-title">Interrogez un site.<br />Obtenez des réponses nettes.</h1>
+          <p class="hero-description">
+            Indiquez un domaine, ajoutez vos questions dans le format attendu par Jev et
+            BrowserJev explore les pages utiles pour répondre.
+          </p>
+        </div>
+        <div class="hero-aside" aria-label="Fonctionnement">
+          <p class="step-number">01</p>
+          <p>Choisissez le domaine</p>
+          <p class="step-number">02</p>
+          <p>Paramétrez les questions</p>
+          <p class="step-number">03</p>
+          <p>Consultez les résultats</p>
+        </div>
+      </section>
+
+      <section class="workspace" aria-labelledby="analysis-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Nouvelle analyse</p>
+            <h2 id="analysis-title">Configurer la recherche</h2>
+          </div>
+          <p class="section-note">Jusqu’à 8 questions · 6 pages maximum</p>
+        </div>
+
+        <form id="analysis-form" novalidate>
+          <div class="target-panel">
+            <label class="field-label" for="target">Domaine ou URL</label>
+            <input
+              id="target"
+              name="target"
+              type="text"
+              inputmode="url"
+              autocomplete="url"
+              placeholder="exemple.com"
+              maxlength="2048"
+              required
+            />
+            <p class="helper-text">Les adresses locales et les réseaux privés sont bloqués.</p>
+          </div>
+
+          <div class="questions-toolbar">
+            <div>
+              <h3>Questions</h3>
+              <p>Choisissez un type puis renseignez uniquement les paramètres affichés.</p>
+            </div>
+            <button class="button button-tertiary" id="add-question" type="button">
+              <span aria-hidden="true">＋</span> Ajouter une question
+            </button>
+          </div>
+
+          <div id="questions" class="questions-list"></div>
+
+          <div id="form-error" class="inline-notification error" role="alert" hidden></div>
+
+          <div class="submit-row">
+            <p>
+              Mode MVP : lecture HTTP des pages publiques. Les applications entièrement rendues en
+              JavaScript peuvent ne pas être accessibles.
+            </p>
+            <button class="button button-primary" id="submit-button" type="submit">
+              <span class="button-label">Analyser le site</span>
+              <span class="button-icon" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="loading" class="loading-panel" aria-live="polite" hidden>
+        <div class="loading-line" aria-hidden="true"></div>
+        <div>
+          <p class="section-kicker">Analyse en cours</p>
+          <h2>BrowserJev explore les pages utiles…</h2>
+          <p>La navigation et chaque réponse sont décidées à partir des éléments trouvés sur le site.</p>
+        </div>
+      </section>
+
+      <section id="results" class="results" aria-labelledby="results-title" hidden>
+        <div class="section-heading results-heading">
+          <div>
+            <p class="section-kicker">Analyse terminée</p>
+            <h2 id="results-title">Résultats</h2>
+          </div>
+          <button class="button button-ghost" id="new-analysis" type="button">
+            Nouvelle analyse ↑
+          </button>
+        </div>
+
+        <div id="result-summary" class="result-summary"></div>
+
+        <div class="result-block">
+          <h3>Réponses</h3>
+          <div id="answers" class="answers-grid"></div>
+        </div>
+
+        <div class="result-block">
+          <div class="evidence-title-row">
+            <h3>Pages consultées</h3>
+            <span id="evidence-count" class="tag"></span>
+          </div>
+          <div id="evidence" class="evidence-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>BrowserJev</p>
+      <p>HTTPX → Jev · Projet open source</p>
+    </footer>
+  </body>
+</html>
