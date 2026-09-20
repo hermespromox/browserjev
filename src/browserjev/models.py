@@ -66,6 +66,7 @@ class PageSnapshot(BaseModel):
     text: str = ""
     links: list[LinkCandidate] = Field(default_factory=list)
     transport: str = "unknown"
+    truncated: bool = False
 
 
 class CrawlConfig(BaseModel):
@@ -91,6 +92,8 @@ class Evidence(BaseModel):
     url: str
     title: str
     excerpt: str
+    transport: str = "unknown"
+    truncated: bool = False
 
 
 class ClassificationResult(BaseModel):
@@ -98,4 +101,5 @@ class ClassificationResult(BaseModel):
     answers: dict[str, ClassificationAnswer]
     evidence: list[Evidence]
     pages_visited: int
+    skipped_urls: list[str] = Field(default_factory=list)
     usage: Usage = Field(default_factory=Usage)

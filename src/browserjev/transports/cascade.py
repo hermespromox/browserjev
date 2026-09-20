@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .http import TransportError
+from .http import JavaScriptRequired, TransportError
 
 
 class CascadeTransport:
@@ -13,12 +13,19 @@ class CascadeTransport:
         self.name = "cascade"
 
     async def fetch(self, url: str):
-        last_error: TransportError | None = None
-        for transport in self.transports:
+        fallback_reason: JavaScriptRequired | None = None
+        try:
+            return await self.transports[0].fetch(url)
+        except JavaScriptRequired as exc:
+            if len(self.transports) == 1:
+                raise
+            fallback_reason = exc
+
+        assert fallback_reason is not None
+        last_error: TransportError = fallback_reason
+        for transport in self.transports[1:]:
             try:
                 return await transport.fetch(url)
             except TransportError as exc:
                 last_error = exc
-        if last_error is not None:
-            raise last_error
-        raise TransportError("no transport could fetch the URL")
+        raise last_error from fallback_reason
