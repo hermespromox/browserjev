@@ -19,11 +19,11 @@
   const evidenceCount = document.querySelector("#evidence-count");
   const newAnalysisButton = document.querySelector("#new-analysis");
 
-  function createQuestion(type = "noul") {
+  function createQuestion(type = "noul", instructions = "") {
     return {
       id: nextId++,
       type,
-      instructions: "",
+      instructions,
       options: [
         { value: "option_1", description: "" },
         { value: "option_2", description: "" },
@@ -420,6 +420,10 @@
     targetInput.focus();
   });
 
-  questions.push(createQuestion());
+  [
+    "Is the pricing on the website?",
+    "Is this a B2B company?",
+    "Is this a SaaS company?",
+  ].forEach((instructions) => questions.push(createQuestion("noul", instructions)));
   renderQuestions();
 })();
