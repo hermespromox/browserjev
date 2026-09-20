@@ -39,6 +39,31 @@ class BrowserJev:
         self.transport = transport
         self.decisions = decisions
 
+    @classmethod
+    def default(
+        cls,
+        *,
+        api_key: str | None = None,
+        lightpanda_endpoint: str | None = None,
+    ) -> BrowserJev:
+        from .decisions import JevDecisionProvider
+        from .transports import (
+            CascadeTransport,
+            HTTPTransport,
+            LightpandaCDPRenderer,
+            LightpandaTransport,
+        )
+
+        transport = CascadeTransport(
+            [
+                HTTPTransport(),
+                LightpandaTransport(
+                    renderer=LightpandaCDPRenderer(endpoint=lightpanda_endpoint)
+                ),
+            ]
+        )
+        return cls(transport=transport, decisions=JevDecisionProvider(api_key=api_key))
+
     async def classify(
         self,
         domain: str,
@@ -51,7 +76,8 @@ class BrowserJev:
         pages: list[PageSnapshot] = []
         visited: set[str] = set()
         next_url: str | None = start
-        goal = "Answer the requested website classification questions using direct evidence."
+        requested = "; ".join(question.instructions for question in questions.values())
+        goal = f"Find direct website evidence needed to answer: {requested}"
 
         while next_url and len(pages) < cfg.max_pages:
             page = await self.transport.fetch(next_url)

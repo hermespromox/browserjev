@@ -35,6 +35,26 @@ class ScoreQuestion(BaseModel):
 Question = ChoiceQuestion | NoulQuestion | ScoreQuestion
 
 
+def question_from_dict(data: dict[str, Any]) -> Question:
+    kind = data.get("type")
+    if kind == "choice":
+        choices = data.get("choices", data.get("criteria"))
+        if not isinstance(choices, dict):
+            raise ValueError("choice questions require a choices map")
+        return ChoiceQuestion(instructions=data["instructions"], choices=choices)
+    if kind == "noul":
+        return NoulQuestion(
+            instructions=data["instructions"],
+            criteria=data.get("criteria"),
+        )
+    if kind == "score":
+        levels = data.get("levels", data.get("criteria"))
+        if not isinstance(levels, list):
+            raise ValueError("score questions require a levels list")
+        return ScoreQuestion(instructions=data["instructions"], levels=levels)
+    raise ValueError(f"unsupported question type: {kind!r}")
+
+
 class LinkCandidate(BaseModel):
     url: str
     label: str

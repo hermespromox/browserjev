@@ -31,12 +31,25 @@ domain + classification schema
 
 Chromium is an optional last-resort adapter, not the default path.
 
-## Intended API
+## Quick start
+
+```bash
+git clone https://github.com/hermespromox/browserjev.git
+cd browserjev
+uv sync --extra dev
+export TYPESAFE_API_KEY="..."
+export LIGHTPANDA_CDP_URL="ws://127.0.0.1:9222"
+uv run browserjev example.com --questions examples/questions.json
+```
+
+The crawler first tries HTTPX + selectolax. It escalates to the configured Lightpanda CDP endpoint only when the static response looks like a JavaScript shell.
+
+## Python API
 
 ```python
 from browserjev import BrowserJev, ChoiceQuestion, NoulQuestion
 
-result = await BrowserJev().classify(
+result = await BrowserJev.default().classify(
     "example.com",
     questions={
         "site_type": ChoiceQuestion(

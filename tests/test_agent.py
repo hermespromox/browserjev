@@ -28,9 +28,11 @@ class FakeTransport:
 class FakeDecisionProvider:
     def __init__(self):
         self.navigation_calls = 0
+        self.last_goal = None
 
     async def choose_next(self, *, goal, pages, links):
         self.navigation_calls += 1
+        self.last_goal = goal
         return "link_0" if self.navigation_calls == 1 else "stop"
 
     async def classify(self, *, pages, questions):
@@ -46,7 +48,8 @@ class FakeDecisionProvider:
 
 async def test_agent_navigates_then_classifies_with_evidence():
     transport = FakeTransport()
-    agent = BrowserJev(transport=transport, decisions=FakeDecisionProvider())
+    decisions = FakeDecisionProvider()
+    agent = BrowserJev(transport=transport, decisions=decisions)
     result = await agent.classify(
         "acme.example",
         questions={
@@ -62,3 +65,4 @@ async def test_agent_navigates_then_classifies_with_evidence():
     assert result.pages_visited == 2
     assert [e.url for e in result.evidence] == transport.visited
     assert result.usage.input_tokens == 100
+    assert "Classify the site" in decisions.last_goal

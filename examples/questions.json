@@ -1,0 +1,25 @@
+{
+  "site_type": {
+    "type": "choice",
+    "instructions": "What is the primary nature of this website?",
+    "choices": {
+      "official": "Official website of an organization",
+      "supplier": "Commercial supplier selling products or services",
+      "media": "News, editorial or informational publication",
+      "other": "None of the above"
+    }
+  },
+  "has_public_pricing": {
+    "type": "noul",
+    "instructions": "Does the website publish specific prices for its main offering?"
+  },
+  "commercial_relevance": {
+    "type": "score",
+    "instructions": "How strongly does the website present a commercial offering?",
+    "levels": [
+      "No commercial offering",
+      "Some indirect commercial signals",
+      "Clear products, services or sales intent"
+    ]
+  }
+}
